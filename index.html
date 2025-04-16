@@ -1,0 +1,292 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Markdown → PDF (One‑Page)</title>
+
+  <!-- Markdown‑it -->
+  <script src="https://cdn.jsdelivr.net/npm/markdown-it/dist/markdown-it.min.js"></script>
+  <!-- html2pdf.js (html2canvas + jsPDF) -->
+  <script src="https://unpkg.com/html2pdf.js@0.10.1/dist/html2pdf.bundle.min.js"></script>
+
+  <!-- GitHub Markdown CSS – modo claro -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.2.0/github-markdown-light.min.css">
+
+  <!-- CodeMirror core + modes -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.css">
+  <!-- CodeMirror themes -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/dracula.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/eclipse.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/markdown/markdown.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/javascript/javascript.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/python/python.min.js"></script>
+
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0 }
+    html, body { height: 100% }
+    body {
+      font-family: system-ui, sans-serif;
+      display: flex;
+      flex-direction: column;
+      background: #282a36; /* fundo geral escuro */
+      color-scheme: light dark;
+    }
+
+    header {
+      background: #24292e;
+      color: #fff;
+      padding: 1rem;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+    }
+    header h1 { font-size: 1.25rem; margin-right:auto; }
+
+    /* Toggle button */
+    .toggle-btn {
+      background:#44475a;
+      color:#f8f8f2;
+      border:none;
+      padding:0.4rem 0.8rem;
+      border-radius:4px;
+      cursor:pointer;
+      font-size:0.85rem;
+    }
+    .toggle-btn.light {
+      background:#e1e4e8;
+      color:#24292e;
+    }
+
+    main {
+      flex: 1;
+      display: flex;
+      overflow: hidden;
+    }
+
+    /* --- Editor base --- */
+    .editor-panel {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .editor-dark {
+      background:#282a36;
+    }
+    .editor-dark .CodeMirror {
+      border: 1px solid #44475a;
+      background:#282a36;
+      color:#f8f8f2;
+    }
+
+    .editor-light {
+      background:#ffffff;
+    }
+    .editor-light .CodeMirror {
+      border:1px solid #d0d7de;
+      background:#fdfdfd;
+      color:#24292e;
+    }
+
+    .CodeMirror {
+      flex:1;
+      height:auto;
+      font-size:0.9rem;
+    }
+
+    /* --- Preview (Light) --- */
+    .preview-panel {
+      flex: 1;
+      background: #ffffff;
+      overflow: auto;
+    }
+    .preview-panel .markdown-body {
+      padding: 2rem;
+      background: #ffffff;
+      color: #24292e;
+      overflow-wrap: break-word;
+    }
+    .preview-panel .markdown-body pre,
+    .preview-panel .markdown-body code {
+      background-color: #f6f8fa;
+      color: #1f2328;
+    }
+
+    /* --- Toolbar --- */
+    .toolbar {
+      background: #24292e;
+      padding: 0.75rem 1rem;
+      text-align: right;
+    }
+    .toolbar button {
+      background: #28a745;
+      color: #fff;
+      border: none;
+      padding: 0.5rem 1rem;
+      font-size: 1rem;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .toolbar button:hover { background: #218838; }
+
+    /* --- Print / pdf CSS --- */
+    @media print {
+      body { background: #ffffff !important; }
+      .markdown-body,
+      .preview-panel {
+        background: #ffffff !important;
+        color: #24292e !important;
+      }
+      pre, code {
+        background: #f6f8fa !important;
+        color: #1f2328 !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Markdown → PDF (One‑Page)</h1>
+    <button id="toggleThemeBtn" class="toggle-btn">🌝</button>
+  </header>
+
+  <main>
+    <div class="editor-panel editor-dark" id="editorPanel">
+      <textarea id="mdInput">
+# Markdown2PDF
+https://md2pdf.netlify.com/
+> Awesome Markdown to PDF!
+```diff
+- Online? Upload resume.md to stranger server?
++ Try Offline Web App!
+```
+
+## How to use md2pdf?
+1. Click button choose .md file.
+2. Edit in editor (left panel).
+3. Click **Transform**!
+4. Switch 'Destination' to **Save as PDF**.
+5. **Chrome recommended**
+
+## Tips
+- `Resize` the layout what you want.
+- After click `Transform` button, inverse the checkbox of **'Headers and Footers'**. 
+- **反選頁首與頁尾**.
+
+## What's special?
+- You can use <span style="color:#0984e3">html</span> tag!
+<blockquote>Hey I'm in blockquote!</blockquote>
+
+## Profile
+- Github: [@realdennis](https://github.com/realdennis)
+- Project: md2pdf (Markdown2PDF)
+- What about me: ☕ 、 👨🏻‍💻️、 🍕、 🎞️
+
+## Code Like this
+```javascript
+// index.js
+function Hello(){
+  console.log('World!')
+}
+Hello();
+```
+
+or this
+
+```python
+# main.py
+def awesome():
+    print('awesome!')
+awesome()
+```
+      </textarea>
+    </div>
+
+    <div class="preview-panel">
+      <article id="preview" class="markdown-body"></article>
+    </div>
+  </main>
+
+  <div class="toolbar">
+    <button id="convertBtn">Download PDF</button>
+  </div>
+
+<script>
+  const md = window.markdownit({ html: true, linkify: true, typographer: true });
+  const textarea = document.getElementById('mdInput');
+  const editorPanel = document.getElementById('editorPanel');
+  const toggleBtn   = document.getElementById('toggleThemeBtn');
+
+  let isDark = true; // start in Dracula
+
+  const editor = CodeMirror.fromTextArea(textarea, {
+    mode: 'markdown',
+    theme: 'dracula',
+    lineNumbers: true,
+    lineWrapping: true
+  });
+
+  const previewEl = document.getElementById('preview');
+
+  function updatePreview() {
+    previewEl.innerHTML = md.render(editor.getValue());
+  }
+  editor.on('change', updatePreview);
+  updatePreview();
+
+  /* --------- Toggle Editor Theme --------- */
+  toggleBtn.addEventListener('click', () => {
+    if (isDark) {
+      // Switch to light
+      editor.setOption('theme', 'eclipse'); // light theme
+      editorPanel.classList.remove('editor-dark');
+      editorPanel.classList.add('editor-light');
+      toggleBtn.textContent = '🌚';
+      toggleBtn.classList.add('light');
+      isDark = false;
+    } else {
+      // Switch back to dark
+      editor.setOption('theme', 'dracula');
+      editorPanel.classList.remove('editor-light');
+      editorPanel.classList.add('editor-dark');
+      toggleBtn.textContent = '🌝';
+      toggleBtn.classList.remove('light');
+      isDark = true;
+    }
+  });
+
+  /* --------- PDF generation --------- */
+  document.getElementById('convertBtn').addEventListener('click', () => {
+    updatePreview();
+
+    previewEl.style.background = '#ffffff';
+    previewEl.style.color = '#24292e';
+
+    const rect = previewEl.getBoundingClientRect();
+    const widthPx  = rect.width;
+    const heightPx = previewEl.scrollHeight;
+    const widthPt  = widthPx  * 0.75;
+    const heightPt = heightPx * 0.75;
+
+    html2pdf().set({
+      margin:      20,
+      filename:    'documento.pdf',
+      image:       { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 2, scrollY: 0, backgroundColor: '#ffffff' },
+      jsPDF:       { unit: 'pt', format: [widthPt, heightPt], orientation: 'portrait' }
+    })
+    .from(previewEl)
+    .save()
+    .finally(() => {
+      previewEl.style.background = '';
+      previewEl.style.color = '';
+    });
+  });
+</script>
+
+</body>
+</html>
