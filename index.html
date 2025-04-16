@@ -68,7 +68,8 @@
 
     /* --- Editor base --- */
     .editor-panel {
-      flex: 1;
+      flex: 0 0 50%;   /* nunca encolhe ou cresce além de 50% */
+      width:50vw;
       display: flex;
       flex-direction: column;
     }
@@ -99,7 +100,8 @@
 
     /* --- Preview (Light) --- */
     .preview-panel {
-      flex: 1;
+      flex: 1 1 50%;  /* ocupa o restante */
+      width:50vw;
       background: #ffffff;
       overflow: auto;
     }
@@ -157,8 +159,8 @@
   <main>
     <div class="editor-panel editor-dark" id="editorPanel">
       <textarea id="mdInput">
-# Markdown2PDF
-https://md2pdf.netlify.com/
+# Markdown2PDF 
+https://md2pdf.mikaio.dev/
 > Awesome Markdown to PDF!
 ```diff
 - Online? Upload resume.md to stranger server?
@@ -166,11 +168,11 @@ https://md2pdf.netlify.com/
 ```
 
 ## How to use md2pdf?
-1. Click button choose .md file.
+1. Click button choose `.md` file.
 2. Edit in editor (left panel).
 3. Click **Transform**!
 4. Switch 'Destination' to **Save as PDF**.
-5. **Chrome recommended**
+4. **Chrome recommended**
 
 ## Tips
 - `Resize` the layout what you want.
@@ -190,7 +192,7 @@ https://md2pdf.netlify.com/
 ```javascript
 // index.js
 function Hello(){
-  console.log('World!')
+    console.log('World!')
 }
 Hello();
 ```
@@ -202,7 +204,10 @@ or this
 def awesome():
     print('awesome!')
 awesome()
+
 ```
+        
+        
       </textarea>
     </div>
 
@@ -241,18 +246,14 @@ awesome()
   /* --------- Toggle Editor Theme --------- */
   toggleBtn.addEventListener('click', () => {
     if (isDark) {
-      // Switch to light
-      editor.setOption('theme', 'eclipse'); // light theme
-      editorPanel.classList.remove('editor-dark');
-      editorPanel.classList.add('editor-light');
+      editor.setOption('theme', 'eclipse');
+      editorPanel.classList.replace('editor-dark', 'editor-light');
       toggleBtn.textContent = '🌚';
       toggleBtn.classList.add('light');
       isDark = false;
     } else {
-      // Switch back to dark
       editor.setOption('theme', 'dracula');
-      editorPanel.classList.remove('editor-light');
-      editorPanel.classList.add('editor-dark');
+      editorPanel.classList.replace('editor-light', 'editor-dark');
       toggleBtn.textContent = '🌝';
       toggleBtn.classList.remove('light');
       isDark = true;
