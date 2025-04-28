@@ -9,7 +9,7 @@
   <!-- Markdown‑it -->
   <script src="https://cdn.jsdelivr.net/npm/markdown-it/dist/markdown-it.min.js"></script>
   <!-- html2pdf.js (html2canvas + jsPDF) -->
-  <script src="https://unpkg.com/html2pdf.js@0.10.1/dist/html2pdf.bundle.min.js"></script>
+  <!-- <script src="https://unpkg.com/html2pdf.js@0.10.1/dist/html2pdf.bundle.min.js"></script> -->
 
   <!-- GitHub Markdown CSS – modo claro -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.2.0/github-markdown-light.min.css">
@@ -23,6 +23,9 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/markdown/markdown.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/javascript/javascript.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/python/python.min.js"></script>
+  <!-- Substitua as CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0 }
@@ -261,32 +264,51 @@ awesome()
   });
 
   /* --------- PDF generation --------- */
-  document.getElementById('convertBtn').addEventListener('click', () => {
-    updatePreview();
+  // document.getElementById('convertBtn').addEventListener('click', () => {
+  //   updatePreview();
 
-    previewEl.style.background = '#ffffff';
-    previewEl.style.color = '#24292e';
+  //   previewEl.style.background = '#ffffff';
+  //   previewEl.style.color = '#24292e';
 
-    const rect = previewEl.getBoundingClientRect();
-    const widthPx  = rect.width;
-    const heightPx = previewEl.scrollHeight;
-    const widthPt  = widthPx  * 0.75;
-    const heightPt = heightPx * 0.75;
+  //   const rect = previewEl.getBoundingClientRect();
+  //   const widthPx  = rect.width;
+  //   const heightPx = previewEl.scrollHeight;
+  //   const widthPt  = widthPx  * 0.75;
+  //   const heightPt = heightPx * 0.75;
 
-    html2pdf().set({
-      margin:      20,
-      filename:    'documento.pdf',
-      image:       { type: 'jpeg', quality: 0.98 },
-      html2canvas: { scale: 2, scrollY: 0, backgroundColor: '#ffffff' },
-      jsPDF:       { unit: 'pt', format: [widthPt, heightPt], orientation: 'portrait' }
-    })
-    .from(previewEl)
-    .save()
-    .finally(() => {
-      previewEl.style.background = '';
-      previewEl.style.color = '';
-    });
+  //   html2pdf().set({
+  //     margin:      20,
+  //     filename:    'documento.pdf',
+  //     image:       { type: 'jpeg', quality: 0.98 },
+  //     html2canvas: { scale: 2, scrollY: 0, backgroundColor: '#ffffff' },
+  //     jsPDF:       { unit: 'pt', format: [widthPt, heightPt], orientation: 'portrait' }
+  //   })
+  //   .from(previewEl)
+  //   .save()
+  //   .finally(() => {
+  //     previewEl.style.background = '';
+  //     previewEl.style.color = '';
+  //   });
+  // });
+  /* --------- PDF generation --------- */
+document.getElementById('convertBtn').addEventListener('click', async () => {
+  updatePreview();                     // garante HTML atualizado
+  const { jsPDF } = window.jspdf;      // UMD export
+
+  const pdf = new jsPDF({
+    unit: 'pt',           // pontos tipográficos
+    format: 'a4',
+    orientation: 'portrait'
   });
+
+  await pdf.html(previewEl, {
+    margin: [40, 20, 40, 20],          // [top, right, bottom, left]
+    autoPaging: 'text',                // quebra páginas automaticamente
+    html2canvas: { scale: 1, useCORS: true },
+    callback: pdf => pdf.save('documento.pdf')
+  });
+});
+
 </script>
 
 </body>
